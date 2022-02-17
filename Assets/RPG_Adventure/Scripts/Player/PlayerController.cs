@@ -9,12 +9,15 @@ namespace RPG_Adventure
         public float speed;
         public float rotationSpeed;
 
-        private Rigidbody m_Rb;
-        private Vector3 m_Movement;
 
-        private void Start()
+        private Vector3 m_Movement;
+        private Camera m_MainCamera;
+        private CharacterController m_CharController;
+
+        private void Awake()
         {
-            m_Rb = GetComponent<Rigidbody>();
+            m_CharController = GetComponent<CharacterController>();
+            m_MainCamera = Camera.main; // Gets a camera gameobject with "MainCamera" tag
         }
 
         void FixedUpdate()
@@ -23,24 +26,27 @@ namespace RPG_Adventure
             float verticalInput = Input.GetAxis("Vertical");
 
             m_Movement.Set(horizontalInput, 0, verticalInput);
-            m_Movement.Normalize();
 
-            Vector3 desiredForward = Vector3.RotateTowards(
-               transform.forward,
-               m_Movement,
-               Time.fixedDeltaTime * rotationSpeed,
-               0
-           );
+            Quaternion camRotation = m_MainCamera.transform.rotation;
+            Vector3 targetDirection = camRotation * m_Movement;
+
+            m_CharController.Move(
+            targetDirection.normalized * speed * Time.fixedDeltaTime
+            );
+            m_CharController.transform.rotation = Quaternion.Euler(0, camRotation.eulerAngles.y, 0);
+
+
+            //* ----------------------- better movement with rotation (i'm not deleting this code because it might be helpful to look at it in the future)
+            //     Vector3 desiredForward = Vector3.RotateTowards(
+            //        transform.forward,
+            //        m_Movement,
+            //        Time.fixedDeltaTime * rotationSpeed,
+            //        0
+            //    );
 
             // Quaternion rotation = Quaternion.LookRotation(desiredForward);
-
-            m_Rb.MovePosition(
-                m_Rb.position + m_Movement * speed * Time.fixedDeltaTime
-            );
-
             // m_Rb.MoveRotation(rotation);
 
-            //* ----------------------- better movement with rotation
             // Vector3 dir = Vector3.zero;
             // dir.x = Input.GetAxis("Horizontal");
             // dir.z = Input.GetAxis("Vertical");
