@@ -8,7 +8,6 @@ namespace RPG_Adventure
     {
         public float speed;
         public float rotationSpeed;
-        public Camera cam;
 
         private Rigidbody m_Rb;
         private Vector3 m_Movement;
