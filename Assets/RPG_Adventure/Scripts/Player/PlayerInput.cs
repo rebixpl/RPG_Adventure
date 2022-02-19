@@ -17,6 +17,14 @@ namespace RPG_Adventure
             }
         }
 
+        public bool IsMoveInput
+        {
+            get
+            {
+                return !Mathf.Approximately(MoveInput.magnitude, 0);
+            }
+        }
+
         void Update()
         {
             m_Movement.Set(
