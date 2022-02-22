@@ -7,8 +7,7 @@ namespace RPG_Adventure
 {
     public class CameraController : MonoBehaviour
     {
-        [SerializeField]
-        CinemachineFreeLook freeLookCamera;
+        public CinemachineFreeLook freeLookCamera;
 
         // Update is called once per frame
         void Update()
