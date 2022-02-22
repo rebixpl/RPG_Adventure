@@ -27,7 +27,7 @@ namespace RPG_Adventure
         {
             m_CharController = GetComponent<CharacterController>();
             //m_MainCamera = Camera.main; // Gets a camera gameobject with "MainCamera" tag
-            m_CameraController = GetComponent<CameraController>();
+            m_CameraController = Camera.main.GetComponent<CameraController>();
             m_PlayerInput = GetComponent<PlayerInput>();
             m_Animator = GetComponent<Animator>();
         }
@@ -84,7 +84,7 @@ namespace RPG_Adventure
 
             Vector3 cameraDirection = Quaternion.Euler(
                 0,
-                m_CameraController.freeLookCamera.m_XAxis.Value,
+                m_CameraController.PlayerCam.m_XAxis.Value,
                 0
             ) * Vector3.forward;
 

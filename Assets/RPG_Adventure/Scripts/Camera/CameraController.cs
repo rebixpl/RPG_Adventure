@@ -1,16 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Cinemachine;
+using UnityEngine;
 
 namespace RPG_Adventure
 {
     public class CameraController : MonoBehaviour
     {
-        public CinemachineFreeLook freeLookCamera;
+        [SerializeField]
+        private CinemachineFreeLook freeLookCamera;
+
+        public CinemachineFreeLook PlayerCam
+        {
+            get
+            {
+                return freeLookCamera;
+            }
+        }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if (Input.GetMouseButtonDown(1))
             {
@@ -27,5 +34,4 @@ namespace RPG_Adventure
             }
         }
     }
-
 }
