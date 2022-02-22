@@ -9,8 +9,9 @@ namespace RPG_Adventure
 
         public float maxForwardSpeed = 8.0f;
         public float rotationSpeed;
-        public int m_MaxRotationSpeed = 1200;
-        public int m_MinRotationSpeed = 700;
+        public float m_MaxRotationSpeed = 1200;
+        public float m_MinRotationSpeed = 700;
+        public float gravity = 9.8f;
 
         private PlayerInput m_PlayerInput;
         private CharacterController m_CharController;
@@ -20,6 +21,7 @@ namespace RPG_Adventure
 
         private float m_DesiredForwardSpeed;
         private float m_ForwardSpeed;
+        private float m_VerticalSpeed;
 
         private readonly int m_HashForwardSpeed = Animator.StringToHash("ForwardSpeed");
 
@@ -34,7 +36,8 @@ namespace RPG_Adventure
 
         private void FixedUpdate()
         {
-            ComputeMovement();
+            ComputeForwardMovement();
+            ComputeVerticalMovement();
             ComputeRotation();
 
             if (m_PlayerInput.IsMoveInput)
@@ -58,10 +61,17 @@ namespace RPG_Adventure
         private void OnAnimatorMove()
         {
             // Apply Root Motion handled by script
-            m_CharController.Move(m_Animator.deltaPosition);
+            Vector3 movement = m_Animator.deltaPosition;
+            movement += m_VerticalSpeed * Vector3.up * Time.fixedDeltaTime;
+            m_CharController.Move(movement);
         }
 
-        private void ComputeMovement()
+        private void ComputeVerticalMovement()
+        {
+            m_VerticalSpeed = -gravity;
+        }
+
+        private void ComputeForwardMovement()
         {
             Vector3 moveInput = m_PlayerInput.MoveInput.normalized;
 
