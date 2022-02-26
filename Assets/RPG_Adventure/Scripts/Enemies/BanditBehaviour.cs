@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,26 +8,61 @@ namespace RPG_Adventure
     {
         public float detectionRadius = 10.0f;
         public float detectionAngle = 90.0f;
+        public float timeToStopPursuit = 2.0f;
+        public float timeToWaitOnPursuit = 2.0f;
 
         private PlayerController m_Target;
         private NavMeshAgent m_NavMeshAgent;
+        private float m_TimeSinceLostTarget = 0.0f;
+        private Vector3 m_OriginPosition;
 
         private void Awake()
         {
             m_NavMeshAgent = GetComponent<NavMeshAgent>();
+            m_OriginPosition = transform.position;
         }
 
         private void Update()
         {
-            m_Target = LookForPlayer();
+            var target = LookForPlayer();
 
-            if (!m_Target) { return; }
+            if (m_Target == null)
+            {
+                if (target != null)
+                {
+                    m_Target = target;
+                }
+            }
+            else
+            {
+                // Set the destination of AI to follow player
+                m_NavMeshAgent.SetDestination(m_Target.transform.position);
 
-            Vector3 targetPosition = m_Target.transform.position;
-            Debug.Log(targetPosition);
+                if (target == null)
+                {
+                    // Player is not inside enemy range, count the time
+                    m_TimeSinceLostTarget += Time.deltaTime;
 
-            // Set the destination of AI to follow player
-            m_NavMeshAgent.SetDestination(targetPosition);
+                    // If player is not inside enemy range for specified time,
+                    // set target to null and thus stop following the target(player)
+                    if (m_TimeSinceLostTarget >= timeToStopPursuit)
+                    {
+                        m_Target = null;
+                        m_NavMeshAgent.isStopped = true;
+                        StartCoroutine(WaitOnPursuit());
+                    }
+                }
+            }
+        }
+
+        private IEnumerator WaitOnPursuit()
+        {
+            // After timeToWaitOnPursuit seconds, the enemy should be able to move again
+            yield return new WaitForSeconds(timeToWaitOnPursuit);
+            m_NavMeshAgent.isStopped = false;
+
+            // Move to the origin position
+            m_NavMeshAgent.SetDestination(m_OriginPosition);
         }
 
         private PlayerController LookForPlayer()
