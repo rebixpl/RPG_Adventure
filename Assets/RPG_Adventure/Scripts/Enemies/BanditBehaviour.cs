@@ -15,10 +15,15 @@ namespace RPG_Adventure
         private NavMeshAgent m_NavMeshAgent;
         private float m_TimeSinceLostTarget = 0.0f;
         private Vector3 m_OriginPosition;
+        private Animator m_Animator;
+
+        private readonly int m_HashInPursuit = Animator.StringToHash("InPursuit");
+        private readonly int m_HashNearBase = Animator.StringToHash("NearBase");
 
         private void Awake()
         {
             m_NavMeshAgent = GetComponent<NavMeshAgent>();
+            m_Animator = GetComponent<Animator>();
             m_OriginPosition = transform.position;
         }
 
@@ -37,6 +42,7 @@ namespace RPG_Adventure
             {
                 // Set the destination of AI to follow player
                 m_NavMeshAgent.SetDestination(m_Target.transform.position);
+                m_Animator.SetBool(m_HashInPursuit, true);
 
                 if (target == null)
                 {
@@ -49,10 +55,21 @@ namespace RPG_Adventure
                     {
                         m_Target = null;
                         m_NavMeshAgent.isStopped = true;
+                        m_Animator.SetBool(m_HashInPursuit, false);
                         StartCoroutine(WaitOnPursuit());
                     }
                 }
+                else
+                {
+                    m_TimeSinceLostTarget = 0;
+                }
             }
+
+            Vector3 toBase = m_OriginPosition - transform.position;
+            toBase.y = 0;
+
+            // Inform animator, that the enemy is near it's base
+            m_Animator.SetBool(m_HashNearBase, toBase.magnitude < 0.01f);
         }
 
         private IEnumerator WaitOnPursuit()
