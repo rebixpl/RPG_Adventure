@@ -9,7 +9,7 @@ namespace RPG_Adventure
         private CinemachineFreeLook freeLookCamera;
 
         private readonly float m_MaxCameraFOV = 40.0f;
-        private readonly float m_MinCameraFOV = 10.0f;
+        private readonly float m_MinCameraFOV = 20.0f;
 
         public CinemachineFreeLook PlayerCam
         {
