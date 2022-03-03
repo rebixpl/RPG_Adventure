@@ -17,19 +17,26 @@ namespace RPG_Adventure
 
         private void OnAnimatorMove()
         {
-            if (m_NavMeshAgent == null)
+            if (m_NavMeshAgent.enabled)
             {
-                return;
+                // TODO: this code is bugged (speed of enemy depends highly on game fps) need to fix it asap
+                m_NavMeshAgent.speed = (m_Animator.deltaPosition / Time.fixedDeltaTime).magnitude
+                    * m_SpeedModifier;
             }
-
-            // TODO: this code is bugged (speed of enemy depends highly on game fps) need to fix it asap
-            m_NavMeshAgent.speed = (m_Animator.deltaPosition / Time.fixedDeltaTime).magnitude
-                * m_SpeedModifier;
         }
 
-        public bool SetFollowTarget(Vector3 position)
+        public bool FollowTarget(Vector3 position)
         {
+            if (!m_NavMeshAgent.enabled) { m_NavMeshAgent.enabled = true; }
+
+            // Follow the player (his position)
             return m_NavMeshAgent.SetDestination(position);
+        }
+
+        public void StopFollowTarget()
+        {
+            // Stop following the player
+            m_NavMeshAgent.enabled = false;
         }
     }
 }

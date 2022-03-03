@@ -46,17 +46,16 @@ namespace RPG_Adventure
 
                 if (toTarget.magnitude <= attackDistance)
                 {
+                    m_EnemyController.StopFollowTarget();
                     // Attack if distance is close enough
-                    Debug.Log("Attacking!");
-                    m_Animator.SetBool(m_HashInPursuit, false);
                     m_Animator.SetTrigger(m_HashAttack);
                 }
                 else
                 {
                     // Keep following player
                     m_Animator.SetBool(m_HashInPursuit, true);
-                    m_EnemyController.SetFollowTarget(m_Target.transform.position);
-                } 
+                    m_EnemyController.FollowTarget(m_Target.transform.position);
+                }
 
                 if (target == null)
                 {
@@ -91,7 +90,7 @@ namespace RPG_Adventure
             yield return new WaitForSeconds(timeToWaitOnPursuit);
 
             // Move to the origin position
-            m_EnemyController.SetFollowTarget(m_OriginPosition);
+            m_EnemyController.FollowTarget(m_OriginPosition);
         }
 
         // This if UNITY_EDITOR means, that the method inside will be only a part of the editor,
