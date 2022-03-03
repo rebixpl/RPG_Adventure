@@ -8,6 +8,7 @@ namespace RPG_Adventure
         public PlayerScanner playerScanner;
         public float timeToStopPursuit = 2.0f;
         public float timeToWaitOnPursuit = 2.0f;
+        public float attackDistance = 1.1f;
 
         private PlayerController m_Target;
         private EnemyController m_EnemyController;
@@ -17,6 +18,7 @@ namespace RPG_Adventure
 
         private readonly int m_HashInPursuit = Animator.StringToHash("InPursuit");
         private readonly int m_HashNearBase = Animator.StringToHash("NearBase");
+        private readonly int m_HashAttack = Animator.StringToHash("Attack");
 
         private void Awake()
         {
@@ -38,9 +40,23 @@ namespace RPG_Adventure
             }
             else
             {
-                // Set the destination of AI to follow player
-                m_EnemyController.SetFollowTarget(m_Target.transform.position);
-                m_Animator.SetBool(m_HashInPursuit, true);
+                // ATTACKING THE PLAYER
+                // Check the distance from enemy to player
+                Vector3 toTarget = m_Target.transform.position - transform.position;
+
+                if (toTarget.magnitude <= attackDistance)
+                {
+                    // Attack if distance is close enough
+                    Debug.Log("Attacking!");
+                    m_Animator.SetBool(m_HashInPursuit, false);
+                    m_Animator.SetTrigger(m_HashAttack);
+                }
+                else
+                {
+                    // Keep following player
+                    m_Animator.SetBool(m_HashInPursuit, true);
+                    m_EnemyController.SetFollowTarget(m_Target.transform.position);
+                } 
 
                 if (target == null)
                 {
