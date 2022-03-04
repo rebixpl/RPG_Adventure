@@ -820,6 +820,9 @@ GameObject:
   - component: {fileID: 95735082086840126}
   - component: {fileID: 114064419799455960}
   - component: {fileID: 6800145927487079777}
+  - component: {fileID: 1443403211}
+  - component: {fileID: 1443403212}
+  - component: {fileID: 8424438563541015978}
   m_Layer: 0
   m_Name: Female C
   m_TagString: Untagged
@@ -857,7 +860,7 @@ Animator:
   m_GameObject: {fileID: 1131775697853092}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d4bc8aeee1248da43a4176631929bc9d, type: 3}
-  m_Controller: {fileID: 9100000, guid: 65b24d220c8cbeb40a814835a4a35299, type: 2}
+  m_Controller: {fileID: 9100000, guid: 312a1044ec32d944995f5eb7d501e411, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -920,6 +923,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f890e9cff4dc04ebec4f1aca9fb30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerScanner:
+    detectionRadius: 10
+    detectionAngle: 90
+  timeToStopPursuit: 2
+  timeToWaitOnPursuit: 2
+  attackDistance: 1.1
+--- !u!195 &1443403211
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131775697853092}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 1
+  m_Acceleration: 900
+  avoidancePriority: 50
+  m_AngularSpeed: 900
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.8
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &1443403212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131775697853092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46b9e7f1da9f2d4409775e7ca76b1637, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8424438563541015978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131775697853092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36cbf6a11ffa4fd408798cfdbf74f112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHitPoints: 100
 --- !u!1 &1142277583328720
 GameObject:
   m_ObjectHideFlags: 0
