@@ -10,7 +10,15 @@ namespace RPG_Adventure
         public float timeToWaitOnPursuit = 2.0f;
         public float attackDistance = 1.1f;
 
-        private PlayerController m_Target;
+        public bool HasFollowTarget
+        {
+            get
+            {
+                return m_FollowTarget != null;
+            }
+        }
+
+        private PlayerController m_FollowTarget;
         private EnemyController m_EnemyController;
         private Animator m_Animator;
         private Vector3 m_OriginPosition;
@@ -32,54 +40,30 @@ namespace RPG_Adventure
 
         private void Update()
         {
-            var target = playerScanner.Detect(transform);
+            var detectedTarget = playerScanner.Detect(transform);
+            bool hasDetectedTarget = detectedTarget != null;
 
-            if (m_Target == null)
+            if (hasDetectedTarget) { m_FollowTarget = detectedTarget; }
+
+            if (HasFollowTarget)
             {
-                if (target != null)
-                {
-                    m_Target = target;
-                }
-            }
-            else
-            {
-                // ATTACKING THE PLAYER
-                // Check the distance from enemy to player
-                Vector3 toTarget = m_Target.transform.position - transform.position;
+                AttackOrFollowTarget();
 
-                if (toTarget.magnitude <= attackDistance)
-                {
-                    m_EnemyController.StopFollowTarget();
-                    // Attack if distance is close enough
-                    m_Animator.SetTrigger(m_HashAttack);
-                }
-                else
-                {
-                    // Keep following player
-                    m_Animator.SetBool(m_HashInPursuit, true);
-                    m_EnemyController.FollowTarget(m_Target.transform.position);
-                }
-
-                if (target == null)
-                {
-                    // Player is not inside enemy range, count the time
-                    m_TimeSinceLostTarget += Time.deltaTime;
-
-                    // If player is not inside enemy range for specified time,
-                    // set target to null and thus stop following the target(player)
-                    if (m_TimeSinceLostTarget >= timeToStopPursuit)
-                    {
-                        m_Target = null;
-                        m_Animator.SetBool(m_HashInPursuit, false);
-                        StartCoroutine(WaitOnPursuit());
-                    }
-                }
-                else
+                if (hasDetectedTarget)
                 {
                     m_TimeSinceLostTarget = 0;
                 }
+                else
+                {
+                    StopPursuit();
+                }
             }
 
+            CheckIfNecarBase();
+        }
+
+        private void CheckIfNecarBase()
+        {
             Vector3 toBase = m_OriginPosition - transform.position;
             toBase.y = 0;
 
@@ -97,6 +81,41 @@ namespace RPG_Adventure
                     360 * Time.deltaTime);
 
                 transform.rotation = targetRotation;
+            }
+        }
+
+        private void StopPursuit()
+        {
+            // Player is not inside enemy range, count the time
+            m_TimeSinceLostTarget += Time.deltaTime;
+
+            // If player is not inside enemy range for specified time,
+            // set target to null and thus stop following the target(player)
+            if (m_TimeSinceLostTarget >= timeToStopPursuit)
+            {
+                m_FollowTarget = null;
+                m_Animator.SetBool(m_HashInPursuit, false);
+                StartCoroutine(WaitOnPursuit());
+            }
+        }
+
+        private void AttackOrFollowTarget()
+        {
+            // ATTACKING THE PLAYER
+            // Check the distance from enemy to player
+            Vector3 toTarget = m_FollowTarget.transform.position - transform.position;
+
+            if (toTarget.magnitude <= attackDistance)
+            {
+                m_EnemyController.StopFollowTarget();
+                // Attack if distance is close enough
+                m_Animator.SetTrigger(m_HashAttack);
+            }
+            else
+            {
+                // Keep following player
+                m_Animator.SetBool(m_HashInPursuit, true);
+                m_EnemyController.FollowTarget(m_FollowTarget.transform.position);
             }
         }
 
