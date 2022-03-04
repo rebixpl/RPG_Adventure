@@ -12,9 +12,11 @@ namespace RPG_Adventure
 
         private PlayerController m_Target;
         private EnemyController m_EnemyController;
-        private float m_TimeSinceLostTarget = 0.0f;
-        private Vector3 m_OriginPosition;
         private Animator m_Animator;
+        private Vector3 m_OriginPosition;
+        private Quaternion m_OriginRotation;
+
+        private float m_TimeSinceLostTarget = 0.0f;
 
         private readonly int m_HashInPursuit = Animator.StringToHash("InPursuit");
         private readonly int m_HashNearBase = Animator.StringToHash("NearBase");
@@ -25,6 +27,7 @@ namespace RPG_Adventure
             m_EnemyController = GetComponent<EnemyController>();
             m_Animator = GetComponent<Animator>();
             m_OriginPosition = transform.position;
+            m_OriginRotation = transform.rotation;
         }
 
         private void Update()
@@ -80,8 +83,21 @@ namespace RPG_Adventure
             Vector3 toBase = m_OriginPosition - transform.position;
             toBase.y = 0;
 
+            bool nearBase = toBase.magnitude < 0.01f;
+
             // Inform animator, that the enemy is near it's base
-            m_Animator.SetBool(m_HashNearBase, toBase.magnitude < 0.01f);
+            m_Animator.SetBool(m_HashNearBase, nearBase);
+
+            if (nearBase)
+            {
+                // If enemy is near it's original location, rotate to original rotation
+                Quaternion targetRotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    m_OriginRotation,
+                    360 * Time.deltaTime);
+
+                transform.rotation = targetRotation;
+            }
         }
 
         private IEnumerator WaitOnPursuit()
