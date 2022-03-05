@@ -17,6 +17,7 @@ namespace RPG_Adventure
         public float m_MaxRotationSpeed = 1200;
         public float m_MinRotationSpeed = 700;
         public float gravity = 9.8f;
+        public MeleeWeapon meleeWeapon;
 
         private static PlayerController s_Instance;
         private PlayerInput m_PlayerInput;
@@ -73,6 +74,7 @@ namespace RPG_Adventure
             if (m_PlayerInput.IsAttack)
             {
                 m_Animator.SetTrigger(m_HashMeleeAttack);
+                meleeWeapon.BeginAttack();
             }
         }
 
