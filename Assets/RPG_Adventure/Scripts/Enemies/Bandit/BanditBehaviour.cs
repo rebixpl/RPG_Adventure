@@ -139,6 +139,7 @@ namespace RPG_Adventure
         {
             // Drawing representation of enemy circle detection range
             Color c = new Color(0.8f, 0, 0, 0.4f);
+            Color m = new Color(0.0f, 0.8f, 0.9f, 0.4f);
             UnityEditor.Handles.color = c;
 
             Vector3 rotatedForward = Quaternion.Euler(
@@ -154,6 +155,16 @@ namespace RPG_Adventure
                 playerScanner.detectionAngle,
                 playerScanner.detectionRadius
             );
+
+            UnityEditor.Handles.color = m;
+
+            UnityEditor.Handles.DrawSolidArc(
+               transform.position,
+               Vector3.up,
+               rotatedForward,
+               360,
+               playerScanner.meleeDetectionRadius
+           );
         }
 
 #endif

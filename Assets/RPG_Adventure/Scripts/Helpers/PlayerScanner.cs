@@ -7,6 +7,7 @@ namespace RPG_Adventure
     [System.Serializable]
     public class PlayerScanner
     {
+        public float meleeDetectionRadius = 2.0f;
         public float detectionRadius = 10.0f;
         public float detectionAngle = 90.0f;
 
@@ -20,13 +21,14 @@ namespace RPG_Adventure
 
             // toPlayer is a distance from enemy to a player
             Vector3 toPlayer = PlayerController.Instance.transform.position - detector.position;
-            toPlayer.y = 0;
+            toPlayer.y = 0; 
 
             if (toPlayer.magnitude <= detectionRadius)
             {
                 // Player detected in the specified range
-                if (Vector3.Dot(toPlayer.normalized, detector.forward) >
-                    Mathf.Cos(detectionAngle * 0.5f * Mathf.Deg2Rad))
+                if ((Vector3.Dot(toPlayer.normalized, detector.forward) >
+                    Mathf.Cos(detectionAngle * 0.5f * Mathf.Deg2Rad)) ||
+                    (toPlayer.magnitude <= meleeDetectionRadius))
                 {
                     // return player instance
                     return PlayerController.Instance;

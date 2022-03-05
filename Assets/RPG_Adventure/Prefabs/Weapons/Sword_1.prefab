@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8006712550959160672}
   - component: {fileID: 8006712550958063520}
   - component: {fileID: 3937096444343027618}
+  - component: {fileID: 3434312525682536554}
   m_Layer: 0
   m_Name: Sword_1
   m_TagString: Untagged
@@ -95,3 +96,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
+--- !u!114 &3434312525682536554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8006712550960316768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a045302f81302e64db602fb5d88a57c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toFollow: {fileID: 0}
