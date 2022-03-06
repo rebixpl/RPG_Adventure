@@ -74,7 +74,6 @@ namespace RPG_Adventure
             if (m_PlayerInput.IsAttack)
             {
                 m_Animator.SetTrigger(m_HashMeleeAttack);
-                meleeWeapon.BeginAttack();
             }
         }
 
@@ -84,6 +83,16 @@ namespace RPG_Adventure
             Vector3 movement = m_Animator.deltaPosition;
             movement += m_VerticalSpeed * Vector3.up * Time.fixedDeltaTime;
             m_CharController.Move(movement);
+        }
+
+        public void MeleeAttackStart()
+        {
+            meleeWeapon.BeginAttack();
+        }
+
+        public void MeleeAttackEnd()
+        {
+            meleeWeapon.EndAttack();
         }
 
         private void ComputeVerticalMovement()

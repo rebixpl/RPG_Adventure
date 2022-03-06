@@ -51,6 +51,11 @@ namespace RPG_Adventure
             }
         }
 
+        public void EndAttack()
+        {
+            m_IsAttack = false;
+        }
+
 #if UNITY_EDITOR
 
         private void OnDrawGizmosSelected()
