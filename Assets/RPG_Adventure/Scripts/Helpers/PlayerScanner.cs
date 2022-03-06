@@ -21,7 +21,7 @@ namespace RPG_Adventure
 
             // toPlayer is a distance from enemy to a player
             Vector3 toPlayer = PlayerController.Instance.transform.position - detector.position;
-            toPlayer.y = 0; 
+            toPlayer.y = 0;
 
             if (toPlayer.magnitude <= detectionRadius)
             {

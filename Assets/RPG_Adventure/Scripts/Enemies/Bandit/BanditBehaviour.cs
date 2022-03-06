@@ -107,6 +107,14 @@ namespace RPG_Adventure
 
             if (toTarget.magnitude <= attackDistance)
             {
+                var toTargetRotation = Quaternion.LookRotation(toTarget);
+                // always rotate towards the player
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    toTargetRotation,
+                    360.0f * Time.deltaTime
+                );
+
                 m_EnemyController.StopFollowTarget();
                 // Attack if distance is close enough
                 m_Animator.SetTrigger(m_HashAttack);
