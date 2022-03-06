@@ -40,6 +40,11 @@ namespace RPG_Adventure
 
         private void Update()
         {
+            GuardPosition();
+        }
+
+        private void GuardPosition()
+        {
             var detectedTarget = playerScanner.Detect(transform);
             bool hasDetectedTarget = detectedTarget != null;
 
@@ -95,39 +100,49 @@ namespace RPG_Adventure
             {
                 m_FollowTarget = null;
                 m_Animator.SetBool(m_HashInPursuit, false);
-                StartCoroutine(WaitOnPursuit());
+                StartCoroutine(WaitBeforeReturn());
             }
         }
 
         private void AttackOrFollowTarget()
         {
-            // ATTACKING THE PLAYER
             // Check the distance from enemy to player
             Vector3 toTarget = m_FollowTarget.transform.position - transform.position;
 
             if (toTarget.magnitude <= attackDistance)
             {
-                var toTargetRotation = Quaternion.LookRotation(toTarget);
-                // always rotate towards the player
-                transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation,
-                    toTargetRotation,
-                    360.0f * Time.deltaTime
-                );
-
-                m_EnemyController.StopFollowTarget();
-                // Attack if distance is close enough
-                m_Animator.SetTrigger(m_HashAttack);
+                // ATTACKING THE PLAYER
+                AttackTarget(toTarget: toTarget);
             }
             else
             {
                 // Keep following player
-                m_Animator.SetBool(m_HashInPursuit, true);
-                m_EnemyController.FollowTarget(m_FollowTarget.transform.position);
+                FollowTarget();
             }
         }
 
-        private IEnumerator WaitOnPursuit()
+        private void AttackTarget(Vector3 toTarget)
+        {
+            var toTargetRotation = Quaternion.LookRotation(toTarget);
+            // always rotate towards the player
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                toTargetRotation,
+                360.0f * Time.deltaTime
+            );
+
+            m_EnemyController.StopFollowTarget();
+            // Attack if distance is close enough
+            m_Animator.SetTrigger(m_HashAttack);
+        }
+
+        private void FollowTarget()
+        {
+            m_Animator.SetBool(m_HashInPursuit, true);
+            m_EnemyController.FollowTarget(m_FollowTarget.transform.position);
+        }
+
+        private IEnumerator WaitBeforeReturn()
         {
             // After timeToWaitOnPursuit seconds, the enemy should be able to move again
             yield return new WaitForSeconds(timeToWaitOnPursuit);
