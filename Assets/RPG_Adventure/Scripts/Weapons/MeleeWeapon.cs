@@ -17,6 +17,7 @@ namespace RPG_Adventure
 
         private bool m_IsAttack = false;
         private Vector3[] m_OriginAttackPos;
+        private RaycastHit[] m_RayCastHitCache = new RaycastHit[32];
 
         private void FixedUpdate()
         {
@@ -28,12 +29,44 @@ namespace RPG_Adventure
                     Vector3 worldPos = ap.rootTransform.position
                         + ap.rootTransform.TransformDirection(ap.offset);
 
-                    Vector3 attackVector = worldPos - m_OriginAttackPos[i];
+                    Vector3 attackVector = (worldPos - m_OriginAttackPos[i]).normalized;
 
                     // Draw a ray
-                    Ray r = new Ray(worldPos, attackVector);
+                    Ray ray = new Ray(worldPos, attackVector);
                     Debug.DrawRay(worldPos, attackVector, Color.red, 4.0f);
+
+                    int contacts = Physics.SphereCastNonAlloc(
+                        ray,
+                        ap.radius,
+                        m_RayCastHitCache,
+                        attackVector.magnitude,
+                        ~0, // we would like to collide with all of the layers "negation 0" "~0"
+                        QueryTriggerInteraction.Ignore
+                        );
+
+                    for (int k = 0; k < contacts; k++)
+                    {
+                        Collider collider = m_RayCastHitCache[k].collider;
+
+                        if (collider != null)
+                        {
+                            CheckDamage(collider, ap);
+                        }
+                    }
+
+                    m_OriginAttackPos[0] = worldPos;
                 }
+            }
+        }
+
+        private void CheckDamage(Collider other, AttackPoint ap)
+        {
+            Damageable damageable = other.GetComponent<Damageable>();
+
+            if (damageable != null)
+            {
+                // The object sword has collided with, has Damageable script, so we can cause damage to it
+                damageable.ApplyDamage();
             }
         }
 
