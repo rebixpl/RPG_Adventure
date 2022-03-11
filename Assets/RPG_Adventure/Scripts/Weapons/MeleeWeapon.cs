@@ -12,6 +12,7 @@ namespace RPG_Adventure
             public Transform rootTransform;
         }
 
+        public LayerMask targetLayers;
         public int damage = 10;
         public AttackPoint[] attackPoints = new AttackPoint[0];
 
@@ -40,7 +41,7 @@ namespace RPG_Adventure
                         ap.radius,
                         m_RayCastHitCache,
                         attackVector.magnitude,
-                        ~0, // we would like to collide with all of the layers "negation 0" "~0"
+                        ~0, // we would like to collide with all of the layers "negation 0" "~0" ~ means we are flipping every binary number of int32 
                         QueryTriggerInteraction.Ignore
                         );
 
@@ -61,6 +62,14 @@ namespace RPG_Adventure
 
         private void CheckDamage(Collider other, AttackPoint ap)
         {
+            if ((targetLayers.value & (1 << other.gameObject.layer)) == 0)
+            {
+                // We are not hitting the correct layer, return
+                return;
+            }
+
+            // Proceed with checking damage, we are hitting correct layer
+
             Damageable damageable = other.GetComponent<Damageable>();
 
             if (damageable != null)
