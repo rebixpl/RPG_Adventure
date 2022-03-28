@@ -19,6 +19,7 @@ namespace RPG_Adventure
         private bool m_IsAttack = false;
         private Vector3[] m_OriginAttackPos;
         private RaycastHit[] m_RayCastHitCache = new RaycastHit[32];
+        private GameObject m_Owner;
 
         private void FixedUpdate()
         {
@@ -41,7 +42,7 @@ namespace RPG_Adventure
                         ap.radius,
                         m_RayCastHitCache,
                         attackVector.magnitude,
-                        ~0, // we would like to collide with all of the layers "negation 0" "~0" ~ means we are flipping every binary number of int32 
+                        ~0, // we would like to collide with all of the layers "negation 0" "~0" ~ means we are flipping every binary number of int32
                         QueryTriggerInteraction.Ignore
                         );
 
@@ -76,8 +77,17 @@ namespace RPG_Adventure
             {
                 // The object sword has collided with, has Damageable script, so we can cause damage to it
                 Damageable.DamageMessage data;
-                damageable.ApplyDamage();
+                data.amount = damage;
+                data.damager = this;
+                data.damageSource = m_Owner.transform.position;
+
+                damageable.ApplyDamage(data);
             }
+        }
+
+        public void SetOwner(GameObject owner)
+        {
+            m_Owner = owner;
         }
 
         public void BeginAttack()

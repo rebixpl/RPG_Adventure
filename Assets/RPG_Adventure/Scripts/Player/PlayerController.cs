@@ -45,6 +45,8 @@ namespace RPG_Adventure
             m_Animator = GetComponent<Animator>();
 
             s_Instance = this;
+
+            meleeWeapon.SetOwner(gameObject);
         }
 
         private void FixedUpdate()
