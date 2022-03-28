@@ -37,5 +37,6 @@ namespace RPG_Adventure
             // Stop following the player
             m_NavMeshAgent.enabled = false;
         }
+
     }
 }

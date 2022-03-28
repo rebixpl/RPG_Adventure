@@ -75,6 +75,7 @@ namespace RPG_Adventure
             if (damageable != null)
             {
                 // The object sword has collided with, has Damageable script, so we can cause damage to it
+                Damageable.DamageMessage data;
                 damageable.ApplyDamage();
             }
         }

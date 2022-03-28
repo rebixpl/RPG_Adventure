@@ -8653,6 +8653,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8672252990346990089, guid: d208238454b9803419f1c0526e4d10e0, type: 3}
+      propertyPath: hitAngle
+      value: 360
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d208238454b9803419f1c0526e4d10e0, type: 3}
 --- !u!4 &6974265390287212009 stripped
@@ -8667,6 +8671,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 122472027812873534, guid: 16910e6f6da2e104da65ac33f4e11f75, type: 3}
+      propertyPath: hitAngle
+      value: 360
+      objectReference: {fileID: 0}
+    - target: {fileID: 3099740041537936885, guid: 16910e6f6da2e104da65ac33f4e11f75, type: 3}
+      propertyPath: playerScanner.detectionAngle
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 8454785804976337590, guid: 16910e6f6da2e104da65ac33f4e11f75, type: 3}
       propertyPath: m_RootOrder
       value: 3
