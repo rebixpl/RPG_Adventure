@@ -5,6 +5,9 @@ namespace RPG_Adventure
 {
     public class EnemyController : MonoBehaviour
     {
+        public Animator Animator
+        { get { return m_Animator; } }
+
         private NavMeshAgent m_NavMeshAgent;
         private Animator m_Animator;
         private float m_SpeedModifier = 0.9f;
@@ -37,6 +40,5 @@ namespace RPG_Adventure
             // Stop following the player
             m_NavMeshAgent.enabled = false;
         }
-
     }
 }

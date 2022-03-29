@@ -8,18 +8,36 @@ namespace RPG_Adventure
         [Range(0, 360.0f)]
         public float hitAngle = 360.0f;
 
+        public float invulnerabilityTime = 0.5f; 
         public int maxHitPoints;
         public int CurrentHitPoints { get; private set; } // set is private so we can only change the hp amount in this class "Damageable"
         public List<MonoBehaviour> onDamageMessageReceivers;
+
+        private bool m_IsInvulnerable = false;
+        private float m_TimeSinceLastHit = 0;
 
         private void Awake()
         {
             CurrentHitPoints = maxHitPoints;
         }
 
+        private void Update()
+        {
+            if (m_IsInvulnerable)
+            {
+                m_TimeSinceLastHit += Time.deltaTime;
+
+                if (m_TimeSinceLastHit >= invulnerabilityTime)
+                {
+                    m_IsInvulnerable = false;
+                    m_TimeSinceLastHit = 0;
+                }
+            }
+        }
+
         public void ApplyDamage(DamageMessage data)
         {
-            if (CurrentHitPoints <= 0)
+            if (CurrentHitPoints <= 0 || m_IsInvulnerable)
             {
                 // We don't have more hit points, so there is no reason to apply more damage
                 return;
@@ -34,6 +52,9 @@ namespace RPG_Adventure
                 return;
             }
             // Hitting
+            // Make enemy invulnerable for a moment (so damage won't be applied multiple times)
+            m_IsInvulnerable = true;
+            // Decrease HP
             CurrentHitPoints -= data.amount;
 
             var messageType = CurrentHitPoints <= 0 ? MessageType.DEAD : MessageType.DAMAGED;

@@ -20,7 +20,6 @@ namespace RPG_Adventure
 
         private PlayerController m_FollowTarget;
         private EnemyController m_EnemyController;
-        private Animator m_Animator;
         private Vector3 m_OriginPosition;
         private Quaternion m_OriginRotation;
 
@@ -29,11 +28,11 @@ namespace RPG_Adventure
         private readonly int m_HashInPursuit = Animator.StringToHash("InPursuit");
         private readonly int m_HashNearBase = Animator.StringToHash("NearBase");
         private readonly int m_HashAttack = Animator.StringToHash("Attack");
+        private readonly int m_HashHurt = Animator.StringToHash("Hurt");
 
         private void Awake()
         {
             m_EnemyController = GetComponent<EnemyController>();
-            m_Animator = GetComponent<Animator>();
             m_OriginPosition = transform.position;
             m_OriginRotation = transform.rotation;
         }
@@ -70,7 +69,24 @@ namespace RPG_Adventure
         // Receives message from damageable after it detected that enemy was hit
         public void OnReceiveMessage(MessageType type)
         {
-            Debug.Log("BANDIT BEHAVIOUR" + type);
+            switch (type)
+            {
+                case MessageType.DEAD:
+                    Debug.Log("Should play animation dead");
+                    break;
+
+                case MessageType.DAMAGED:
+                    OnReceiveDamage();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void OnReceiveDamage()
+        {
+            m_EnemyController.Animator.SetTrigger(m_HashHurt);
         }
 
         private void CheckIfNecarBase()
@@ -81,7 +97,7 @@ namespace RPG_Adventure
             bool nearBase = toBase.magnitude < 0.01f;
 
             // Inform animator, that the enemy is near it's base
-            m_Animator.SetBool(m_HashNearBase, nearBase);
+            m_EnemyController.Animator.SetBool(m_HashNearBase, nearBase);
 
             if (nearBase)
             {
@@ -105,7 +121,7 @@ namespace RPG_Adventure
             if (m_TimeSinceLostTarget >= timeToStopPursuit)
             {
                 m_FollowTarget = null;
-                m_Animator.SetBool(m_HashInPursuit, false);
+                m_EnemyController.Animator.SetBool(m_HashInPursuit, false);
                 StartCoroutine(WaitBeforeReturn());
             }
         }
@@ -139,12 +155,12 @@ namespace RPG_Adventure
 
             m_EnemyController.StopFollowTarget();
             // Attack if distance is close enough
-            m_Animator.SetTrigger(m_HashAttack);
+            m_EnemyController.Animator.SetTrigger(m_HashAttack);
         }
 
         private void FollowTarget()
         {
-            m_Animator.SetBool(m_HashInPursuit, true);
+            m_EnemyController.Animator.SetBool(m_HashInPursuit, true);
             m_EnemyController.FollowTarget(m_FollowTarget.transform.position);
         }
 
