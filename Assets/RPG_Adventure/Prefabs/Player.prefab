@@ -5845,7 +5845,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36cbf6a11ffa4fd408798cfdbf74f112, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitAngle: 360
   maxHitPoints: 200
+  onDamageMessageReceivers: []
 --- !u!1 &6976074614534605312
 GameObject:
   m_ObjectHideFlags: 0

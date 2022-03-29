@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPG_Adventure
 {
-    public class BanditBehaviour : MonoBehaviour
+    public class BanditBehaviour : MonoBehaviour, IMessageReceiver
     {
         public PlayerScanner playerScanner;
         public float timeToStopPursuit = 2.0f;
@@ -65,6 +65,12 @@ namespace RPG_Adventure
             }
 
             CheckIfNecarBase();
+        }
+
+        // Receives message from damageable after it detected that enemy was hit
+        public void OnReceiveMessage(MessageType type)
+        {
+            Debug.Log("BANDIT BEHAVIOUR" + type);
         }
 
         private void CheckIfNecarBase()

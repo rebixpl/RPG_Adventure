@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG_Adventure
@@ -9,6 +10,7 @@ namespace RPG_Adventure
 
         public int maxHitPoints;
         public int CurrentHitPoints { get; private set; } // set is private so we can only change the hp amount in this class "Damageable"
+        public List<MonoBehaviour> onDamageMessageReceivers;
 
         private void Awake()
         {
@@ -28,16 +30,21 @@ namespace RPG_Adventure
 
             if (Vector3.Angle(transform.forward, positionToDamager) > hitAngle * 0.5)
             {
-                Debug.Log("Not Hitting");
+                // Not Hitting
+                return;
             }
-            else
-            {
-                Debug.Log("Hitting");
-            }
+            // Hitting
+            CurrentHitPoints -= data.amount;
 
-            //Debug.Log(data.amount);
-            //Debug.Log(data.damager);
-            //Debug.Log(data.damageSource);
+            var messageType = CurrentHitPoints <= 0 ? MessageType.DEAD : MessageType.DAMAGED;
+
+            for (int i = 0; i < onDamageMessageReceivers.Count; i++) 
+            { 
+                var receiver = onDamageMessageReceivers[i] as IMessageReceiver;
+                //Debug.Log(messageType);
+                //Debug.Log(receiver);
+                receiver.OnReceiveMessage(messageType);
+            }
         }
 
 #if UNITY_EDITOR

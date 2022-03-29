@@ -3570,7 +3570,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36cbf6a11ffa4fd408798cfdbf74f112, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitAngle: 360
   maxHitPoints: 100
+  onDamageMessageReceivers:
+  - {fileID: 3099740041537936885}
 --- !u!136 &324959358
 CapsuleCollider:
   m_ObjectHideFlags: 0
