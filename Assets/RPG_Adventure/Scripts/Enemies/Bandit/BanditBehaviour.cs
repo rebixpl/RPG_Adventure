@@ -29,6 +29,7 @@ namespace RPG_Adventure
         private readonly int m_HashNearBase = Animator.StringToHash("NearBase");
         private readonly int m_HashAttack = Animator.StringToHash("Attack");
         private readonly int m_HashHurt = Animator.StringToHash("Hurt");
+        private readonly int m_HashDead = Animator.StringToHash("Dead");
 
         private void Awake()
         {
@@ -63,7 +64,7 @@ namespace RPG_Adventure
                 }
             }
 
-            CheckIfNecarBase();
+            CheckIfNearBase();
         }
 
         // Receives message from damageable after it detected that enemy was hit
@@ -72,10 +73,12 @@ namespace RPG_Adventure
             switch (type)
             {
                 case MessageType.DEAD:
-                    Debug.Log("Should play animation dead");
+                    // Play dead animation
+                    OnDead();
                     break;
 
                 case MessageType.DAMAGED:
+                    // Play damaged animation
                     OnReceiveDamage();
                     break;
 
@@ -84,12 +87,18 @@ namespace RPG_Adventure
             }
         }
 
+        private void OnDead()
+        {
+            m_EnemyController.StopFollowTarget();
+            m_EnemyController.Animator.SetTrigger(m_HashDead);
+        }
+
         private void OnReceiveDamage()
         {
             m_EnemyController.Animator.SetTrigger(m_HashHurt);
         }
 
-        private void CheckIfNecarBase()
+        private void CheckIfNearBase()
         {
             Vector3 toBase = m_OriginPosition - transform.position;
             toBase.y = 0;
