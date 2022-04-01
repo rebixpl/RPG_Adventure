@@ -5846,6 +5846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitAngle: 360
+  invulnerabilityTime: 0.5
   maxHitPoints: 200
   onDamageMessageReceivers: []
 --- !u!1 &6976074614534605312
