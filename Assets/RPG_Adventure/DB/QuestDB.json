@@ -6,10 +6,10 @@
     "experience": 100,
     "gold": 5,
     "amount": 2,
-    "targets": [ "b-1" ],
+    "targets": [ "56ebfe93-e97d-4f95-b4cb-5bc295ea188a" ],
     "talkTo": null,
     "explore": null,
-    "questGiver": "qg-1",
+    "questGiver": "579117ba-a808-4946-9722-3d6306d9d499",
     "type": 0
   },
   {
@@ -19,10 +19,10 @@
     "experience": 200,
     "gold": 15,
     "amount": 1,
-    "targets": [ "b-2" ],
+    "targets": [ "56ebfe93-e97d-4f95-b4cb-5bc295ea188a" ],
     "talkTo": null,
     "explore": null,
-    "questGiver": "qg-2",
+    "questGiver": "579117ba-a808-4946-9722-3d6306d9d499",
     "type": 0
   }
 ]

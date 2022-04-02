@@ -12,7 +12,6 @@ namespace RPG_Adventure
 
         [Range(0, 360.0f)]
         public float detectionAngle = 90.0f;
-
         public PlayerController Detect(Transform detector)
         {
             // Check if player does exist in the scene
@@ -40,6 +39,8 @@ namespace RPG_Adventure
             {
                 // Player is not in specified range
             }
+
+            
 
             return null;
         }
